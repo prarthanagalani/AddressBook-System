@@ -24,10 +24,9 @@ class AddContacts {
         this.zip = zip;
         this.phoneNumber = phoneNumber;
         this.email = email;
-            }
-    
+    }
 
-     // getters and setters
+    // getters and setters
     public String getFirstName() {
         return firstName;
     }
@@ -103,27 +102,30 @@ class AddressBook {
     public void addContact(AddContacts contact) {
         contacts.add(contact);
     }
-    
-    // function that will return AddContact object that matches which given firstname and lastname
-    public AddContacts getContactByName(String firstName, String lastName)
-    {
-        for(AddContacts contact : contacts)
-        {
-            if(contact.getFirstName() == firstName && contact.getLastName() == lastName)
-            {
+
+    // function that will return AddContact object that matches which given
+    // firstname and lastname
+    public AddContacts getContactByName(String firstName, String lastName) {
+        for (AddContacts contact : contacts) {
+            if (contact.getFirstName() == firstName && contact.getLastName() == lastName) {
                 return contact;
             }
         }
 
         return null;
     }
-    
+
     // function that will find index of oldcontact and update it will new contact
     public void editContact(AddContacts oldContact, AddContacts newContact) {
         int index = contacts.indexOf(oldContact);
         if (index != -1) {
             contacts.set(index, newContact);
         }
+    } 
+
+    // function to delete contact
+    public void deleteContact(AddContacts contactTodelete) {
+        contacts.remove(contactTodelete);
     }
 }
 
@@ -168,41 +170,56 @@ public class AddressBookSystem {
         String editFirstName = sc.next();
         System.out.print("Last Name: ");
         String editLastName = sc.next();
-        
+
         // using firstname and lastname fetch whole info of that contact
         AddContacts old_contact = addressBook.getContactByName(editFirstName, editLastName);
-        
+
         // if contact exist edit contact details
-        if(old_contact != null)
-        {
+        if (old_contact != null) {
             System.out.println("Enter new details for the contact:");
 
             System.out.print("First Name: ");
-             firstName = sc.next();
+            firstName = sc.next();
             System.out.print("Last Name: ");
-             lastName = sc.next();
+            lastName = sc.next();
             System.out.print("Address: ");
-             address = sc.next();
+            address = sc.next();
             System.out.print("City: ");
-             city = sc.next();
+            city = sc.next();
             System.out.print("State: ");
-             state = sc.next();
+            state = sc.next();
             System.out.print("Zip: ");
-              zip = sc.next();
+            zip = sc.next();
             System.out.print("Phone Number: ");
-             phoneNumber = sc.next();
+            phoneNumber = sc.next();
             System.out.print("Email: ");
-             email = sc.next();
+            email = sc.next();
 
-            AddContacts newContact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber, email);
-            
+            AddContacts newContact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber,
+                    email);
+
             // call editContact will update old_contact with newContact
             addressBook.editContact(old_contact, newContact);
 
-        }
-        else
-        {
+        } else {
             System.out.println("Contact not found!");
+        }
+
+        // Usecase 4: Deleting a person
+        System.out.println("Enter the name of the contact to delete:");
+        System.out.print("First Name: ");
+        String deleteFirstName = sc.next();
+        System.out.print("Last Name: ");
+        String deleteLastName = sc.next();
+        
+        // using firstname and lastname fetch whole info of that contact
+        AddContacts contactTodelete = addressBook.getContactByName(deleteFirstName, deleteLastName);
+
+        if (contactTodelete != null) {
+            addressBook.deleteContact(contactTodelete);
+
+        } else {
+            System.out.println("contact not found!");
         }
 
         sc.close();
