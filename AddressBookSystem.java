@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 class AddContacts {
 
@@ -43,15 +45,14 @@ class AddContacts {
         this.lastName = lastName;
     }
 
-    
     public String toString() {
         return "Name: " + firstName + " " + lastName +
-               "\nAddress: " + address +
-               "\nCity: " + city +
-               "\nState: " + state +
-               "\nZip: " + zip +
-               "\nPhone Number: " + phoneNumber +
-               "\nEmail: " + email;
+                "\nAddress: " + address +
+                "\nCity: " + city +
+                "\nState: " + state +
+                "\nZip: " + zip +
+                "\nPhone Number: " + phoneNumber +
+                "\nEmail: " + email;
     }
 
 }
@@ -98,6 +99,15 @@ class AddressBook {
     }
 }
 
+class StoreAddressBook {
+    private static Map<String, AddressBook> addressBooks = new HashMap<>();
+
+    public static void addAddressBook(String name, AddressBook addressBook) {
+        addressBooks.put(name, addressBook);
+    }
+
+}
+
 public class AddressBookSystem {
 
     public static void main(String[] args) {
@@ -139,12 +149,12 @@ public class AddressBookSystem {
             addAnother = sc.next().charAt(0);
         } while (addAnother == 'y');
 
-         // Display all contacts in the Address Book
-         System.out.println("\nAll Contacts in Address Book:");
-         ArrayList<AddContacts> allContacts = addressBook.getAllContacts();
-         for (AddContacts contact : allContacts) {
-             System.out.println("\n" + contact.toString());
-         }
+        // Display all contacts in the Address Book
+        System.out.println("\nAll Contacts in Address Book:");
+        ArrayList<AddContacts> allContacts = addressBook.getAllContacts();
+        for (AddContacts contact : allContacts) {
+            System.out.println("\n" + contact.toString());
+        }
 
         // Usecase 3: Editing an existing Contact
         System.out.println("Enter the name of the contact to edit:");
@@ -203,6 +213,23 @@ public class AddressBookSystem {
         } else {
             System.out.println("contact not found!");
         }
+
+        // Usecase 6: Refactor to add multiple Address Books to the System
+        System.out.println("Add multiple Address Books to the System");
+        char addAnotherBook;
+        do {
+            System.out.print("Enter a unique name for the new Address Book: ");
+            String addressBookName = sc.next();
+
+            // Create a new Address Book and add it to the system
+            AddressBook newAddressBook = new AddressBook();
+            StoreAddressBook.addAddressBook(addressBookName, newAddressBook);
+            // printing the name of address book
+            System.out.println("Name of addressBook: " + addressBookName);
+
+            System.out.print("Do you want to add another Address Book? (y/n): ");
+            addAnotherBook = sc.next().charAt(0);
+        } while (addAnotherBook == 'y');
 
         sc.close();
 
