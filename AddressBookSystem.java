@@ -43,6 +43,17 @@ class AddContacts {
         this.lastName = lastName;
     }
 
+    
+    public String toString() {
+        return "Name: " + firstName + " " + lastName +
+               "\nAddress: " + address +
+               "\nCity: " + city +
+               "\nState: " + state +
+               "\nZip: " + zip +
+               "\nPhone Number: " + phoneNumber +
+               "\nEmail: " + email;
+    }
+
 }
 
 class AddressBook {
@@ -79,42 +90,61 @@ class AddressBook {
     public void deleteContact(AddContacts contactTodelete) {
         contacts.remove(contactTodelete);
     }
+
+    // function to get all contacts
+
+    public ArrayList<AddContacts> getAllContacts() {
+        return contacts;
+    }
 }
 
 public class AddressBookSystem {
 
     public static void main(String[] args) {
-        // printing welcoe msg
+        // printing welcome msg
         System.out.println("Welcome to address book system program!!!");
 
-        // Usecase 2: Adding a new Contact
         Scanner sc = new Scanner(System.in);
-
-        System.out.println("Enter details for a new contact:");
-        System.out.print("First Name: ");
-        String firstName = sc.next();
-        System.out.print("Last Name: ");
-        String lastName = sc.next();
-        System.out.print("Address: ");
-        String address = sc.next();
-        System.out.print("City: ");
-        String city = sc.next();
-        System.out.print("State: ");
-        String state = sc.next();
-        System.out.print("Zip: ");
-        String zip = sc.next();
-        System.out.print("Phone Number: ");
-        String phoneNumber = sc.next();
-        System.out.print("Email: ");
-        String email = sc.next();
-
-        // calling contructor to create new contact
-        AddContacts new_contact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber, email);
 
         // object of AddressBook class
         AddressBook addressBook = new AddressBook();
-        // add new_contact object in arrayList
-        addressBook.addContact(new_contact);
+
+        // Use case5: creating loop to add multiple contacts
+        System.out.println("Add multiple contacts to Address Book");
+        char addAnother;
+        do {
+            System.out.println("Enter details for a new contact:");
+            System.out.print("First Name: ");
+            String firstName = sc.next();
+            System.out.print("Last Name: ");
+            String lastName = sc.next();
+            System.out.print("Address: ");
+            String address = sc.next();
+            System.out.print("City: ");
+            String city = sc.next();
+            System.out.print("State: ");
+            String state = sc.next();
+            System.out.print("Zip: ");
+            String zip = sc.next();
+            System.out.print("Phone Number: ");
+            String phoneNumber = sc.next();
+            System.out.print("Email: ");
+            String email = sc.next();
+
+            AddContacts new_contact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber,
+                    email);
+            addressBook.addContact(new_contact);
+
+            System.out.print("Do you want to add another person? (y/n): ");
+            addAnother = sc.next().charAt(0);
+        } while (addAnother == 'y');
+
+         // Display all contacts in the Address Book
+         System.out.println("\nAll Contacts in Address Book:");
+         ArrayList<AddContacts> allContacts = addressBook.getAllContacts();
+         for (AddContacts contact : allContacts) {
+             System.out.println("\n" + contact.toString());
+         }
 
         // Usecase 3: Editing an existing Contact
         System.out.println("Enter the name of the contact to edit:");
@@ -131,21 +161,21 @@ public class AddressBookSystem {
             System.out.println("Enter new details for the contact:");
 
             System.out.print("First Name: ");
-            firstName = sc.next();
+            String firstName = sc.next();
             System.out.print("Last Name: ");
-            lastName = sc.next();
+            String lastName = sc.next();
             System.out.print("Address: ");
-            address = sc.next();
+            String address = sc.next();
             System.out.print("City: ");
-            city = sc.next();
+            String city = sc.next();
             System.out.print("State: ");
-            state = sc.next();
+            String state = sc.next();
             System.out.print("Zip: ");
-            zip = sc.next();
+            String zip = sc.next();
             System.out.print("Phone Number: ");
-            phoneNumber = sc.next();
+            String phoneNumber = sc.next();
             System.out.print("Email: ");
-            email = sc.next();
+            String email = sc.next();
 
             AddContacts newContact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber,
                     email);
