@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,7 +204,7 @@ public class AddressBookSystem {
             }
         }
 
-        // Usecase 9:
+        Usecase 9:
         System.out.print("\nEnter the state to view persons: ");
         String viewState = sc.next();
 
@@ -240,7 +242,25 @@ public class AddressBookSystem {
         } else {
             System.out.println("No entries to sort.");
         }
+
+        // Usecase 13:
+
+        String filepath = "address_book.txt";
+
+        addressBook.writeToFile(filepath);
+        // Read Address Book from file
+        AddressBook newAddressBook = new AddressBook();
+        newAddressBook.readFromFile(filepath);
+
+        // Display contacts from the newly read Address Book
+        System.out.println("\nContacts from the newly read Address Book:");
+        ArrayList<AddContacts> allContactss = newAddressBook.getAllContacts();
+        for (AddContacts contact : allContactss) {
+            System.out.println("\n" + contact.toString());
+        }
+
         sc.close();
 
     }
+
 }

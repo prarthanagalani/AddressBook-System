@@ -23,6 +23,8 @@ public class AddContacts {
         this.email = email;
     }
 
+    
+
     // getters and setters
     public String getFirstName() {
         return firstName;
@@ -60,6 +62,19 @@ public class AddContacts {
                 "\nZip: " + zip +
                 "\nPhone Number: " + phoneNumber +
                 "\nEmail: " + email;
+    }
+
+    // Method to convert the contact details to a formatted string for file writing
+    public String toFileString() {
+        return firstName + "," + lastName + "," + address + "," +
+                city + "," + state + "," + zip + "," +
+                phoneNumber + "," + email;
+    }
+
+    // Method to create a contact from a string read from a file
+    public static AddContacts fromFileString(String line) {
+        String[] parts = line.split(",");
+        return new AddContacts(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]);
     }
 
 }

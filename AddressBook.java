@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -116,4 +122,30 @@ public class AddressBook {
                 .sorted(Comparator.comparing(AddContacts::getZip))
                 .collect(Collectors.toList());
     }
+
+    public void writeToFile(String filepath) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filepath))) {
+            for (AddContacts contact : contacts) {
+                writer.println(contact.toFileString());
+            }
+            System.out.println("Address Book written to file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
+    public void readFromFile(String filepath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                AddContacts contact = AddContacts.fromFileString(line);
+                addContact(contact);
+            }
+            System.out.println("Address Book read from file successfully.");
+        } catch (IOException e) {
+            System.out.println("Error reading from file: " + e.getMessage());
+        }
+    }
+
+    
 }
