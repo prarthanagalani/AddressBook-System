@@ -71,15 +71,29 @@ class AddressBook {
     // arrayList of class object
     // composition - one class contains object of another class
     private ArrayList<AddContacts> contacts = new ArrayList<>();
+    private Map<String, List<AddContacts>> cityToPerson = new HashMap<>();
+    private Map<String, List<AddContacts>> stateToPerson = new HashMap<>();
+
 
     public void addContact(AddContacts contact) {
         // use case 7
         if (!contacts.contains(contact)) {
             contacts.add(contact);
+            updateCityAndStateMaps(contact);
             System.out.println("Contact added successfully.");
         } else {
             System.out.println("Duplicate entry! Contact with the same name already exists.");
         }
+    }
+
+    private void updateCityAndStateMaps(AddContacts contact) {
+        // Update cityToPerson map
+        String city = contact.getCity().toLowerCase();
+        cityToPerson.computeIfAbsent(city, k -> new ArrayList<>()).add(contact);
+
+        // Update stateToPerson map
+        String state = contact.getState().toLowerCase();
+        stateToPerson.computeIfAbsent(state, k -> new ArrayList<>()).add(contact);
     }
 
     // function that will return AddContact object that matches which given
@@ -123,6 +137,14 @@ class AddressBook {
         return contacts.stream()
                 .filter(contact -> contact.getState().equalsIgnoreCase(state))
                 .toList();
+    }
+
+    public List<AddContacts> getPersonsByCity(String city) {
+        return cityToPerson.getOrDefault(city.toLowerCase(), new ArrayList<>());
+    }
+
+    public List<AddContacts> getPersonsByState(String state) {
+        return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>());
     }
 }
 
@@ -284,6 +306,19 @@ public class AddressBookSystem {
             stateSearchResults.forEach(person -> System.out.println(person.toString()));
         } else {
             System.out.println("No results found in the state '" + searchState + "'.");
+        }
+
+        //Usecase 9:
+        System.out.print("\nEnter the state to view persons: ");
+        String viewState = sc.next();
+
+        List<AddContacts> stateViewResults = addressBook.getPersonsByState(viewState);
+
+        if (!stateViewResults.isEmpty()) {
+            System.out.println("\nPersons in State '" + viewState + "':");
+            stateViewResults.forEach(person -> System.out.println(person.toString()));
+        } else {
+            System.out.println("No persons found in the state '" + viewState + "'.");
         }
 
         sc.close();
