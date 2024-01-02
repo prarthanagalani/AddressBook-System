@@ -56,6 +56,10 @@ class AddContacts {
         return state;
     }
 
+    public String getZip() {
+        return zip;
+    }
+
     public String toString() {
         return "Name: " + firstName + " " + lastName +
                 "\nAddress: " + address +
@@ -156,9 +160,27 @@ class AddressBook {
         return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>()).size();
     }
 
-     public List<AddContacts> sortByName() {
+    public List<AddContacts> sortByName() {
         return contacts.stream()
                 .sorted(Comparator.comparing(AddContacts::getFirstName).thenComparing(AddContacts::getLastName))
+                .collect(Collectors.toList());
+    }
+
+    public List<AddContacts> sortByCity() {
+        return contacts.stream()
+                .sorted(Comparator.comparing(AddContacts::getCity))
+                .collect(Collectors.toList());
+    }
+
+    public List<AddContacts> sortByState() {
+        return contacts.stream()
+                .sorted(Comparator.comparing(AddContacts::getState))
+                .collect(Collectors.toList());
+    }
+
+    public List<AddContacts> sortByZip() {
+        return contacts.stream()
+                .sorted(Comparator.comparing(AddContacts::getZip))
                 .collect(Collectors.toList());
     }
 }
@@ -350,8 +372,8 @@ public class AddressBookSystem {
 
         int personCountByState = addressBook.getPersonCountByState(countByState);
         System.out.println("Number of contact persons in State '" + countByState + "': " + personCountByState);
-        
-        //Use case11: 
+
+        // Use case11:
         // Sort entries by name
         List<AddContacts> sortedContacts = addressBook.sortByName();
 
