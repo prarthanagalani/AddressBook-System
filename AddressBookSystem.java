@@ -1,198 +1,6 @@
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-class AddContacts {
-
-    // contact info
-    private String firstName;
-    private String lastName;
-    private String address;
-    private String city;
-    private String state;
-    private String zip;
-    private String phoneNumber;
-    private String email;
-
-    // Uscase1: constructor to initialize contacts
-    public AddContacts(String firstName, String lastName, String address, String city, String state, String zip,
-            String phoneNumber, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-    }
-
-    // getters and setters
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public String toString() {
-        return "Name: " + firstName + " " + lastName +
-                "\nAddress: " + address +
-                "\nCity: " + city +
-                "\nState: " + state +
-                "\nZip: " + zip +
-                "\nPhone Number: " + phoneNumber +
-                "\nEmail: " + email;
-    }
-
-}
-
-class AddressBook {
-
-    // arrayList of class object
-    // composition - one class contains object of another class
-    private ArrayList<AddContacts> contacts = new ArrayList<>();
-    private Map<String, List<AddContacts>> cityToPerson = new HashMap<>();
-    private Map<String, List<AddContacts>> stateToPerson = new HashMap<>();
-
-    public void addContact(AddContacts contact) {
-        // use case 7
-        if (!contacts.contains(contact)) {
-            contacts.add(contact);
-            updateCityAndStateMaps(contact);
-            System.out.println("Contact added successfully.");
-        } else {
-            System.out.println("Duplicate entry! Contact with the same name already exists.");
-        }
-    }
-
-    private void updateCityAndStateMaps(AddContacts contact) {
-        // Update cityToPerson map
-        String city = contact.getCity().toLowerCase();
-        cityToPerson.computeIfAbsent(city, k -> new ArrayList<>()).add(contact);
-
-        // Update stateToPerson map
-        String state = contact.getState().toLowerCase();
-        stateToPerson.computeIfAbsent(state, k -> new ArrayList<>()).add(contact);
-    }
-
-    // function that will return AddContact object that matches which given
-    // firstname and lastname
-    public AddContacts getContactByName(String firstName, String lastName) {
-        for (AddContacts contact : contacts) {
-            if (contact.getFirstName() == firstName && contact.getLastName() == lastName) {
-                return contact;
-            }
-        }
-
-        return null;
-    }
-
-    // function that will find index of oldcontact and update it will new contact
-    public void editContact(AddContacts oldContact, AddContacts newContact) {
-        int index = contacts.indexOf(oldContact);
-        if (index != -1) {
-            contacts.set(index, newContact);
-        }
-    }
-
-    // function to delete contact
-    public void deleteContact(AddContacts contactTodelete) {
-        contacts.remove(contactTodelete);
-    }
-
-    // function to get all contacts
-
-    public ArrayList<AddContacts> getAllContacts() {
-        return contacts;
-    }
-
-    public List<AddContacts> searchByCity(String city) {
-        return contacts.stream()
-                .filter(contact -> contact.getCity().equalsIgnoreCase(city))
-                .toList();
-    }
-
-    public List<AddContacts> searchByState(String state) {
-        return contacts.stream()
-                .filter(contact -> contact.getState().equalsIgnoreCase(state))
-                .toList();
-    }
-
-    public List<AddContacts> getPersonsByCity(String city) {
-        return cityToPerson.getOrDefault(city.toLowerCase(), new ArrayList<>());
-    }
-
-    public List<AddContacts> getPersonsByState(String state) {
-        return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>());
-    }
-
-    public int getPersonCountByCity(String city) {
-        return cityToPerson.getOrDefault(city.toLowerCase(), new ArrayList<>()).size();
-    }
-
-    public int getPersonCountByState(String state) {
-        return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>()).size();
-    }
-
-    public List<AddContacts> sortByName() {
-        return contacts.stream()
-                .sorted(Comparator.comparing(AddContacts::getFirstName).thenComparing(AddContacts::getLastName))
-                .collect(Collectors.toList());
-    }
-
-    public List<AddContacts> sortByCity() {
-        return contacts.stream()
-                .sorted(Comparator.comparing(AddContacts::getCity))
-                .collect(Collectors.toList());
-    }
-
-    public List<AddContacts> sortByState() {
-        return contacts.stream()
-                .sorted(Comparator.comparing(AddContacts::getState))
-                .collect(Collectors.toList());
-    }
-
-    public List<AddContacts> sortByZip() {
-        return contacts.stream()
-                .sorted(Comparator.comparing(AddContacts::getZip))
-                .collect(Collectors.toList());
-    }
-}
-
-class StoreAddressBook {
-    private static Map<String, AddressBook> addressBooks = new HashMap<>();
-
-    public static void addAddressBook(String name, AddressBook addressBook) {
-        addressBooks.put(name, addressBook);
-    }
-
-}
 
 public class AddressBookSystem {
 
@@ -243,106 +51,155 @@ public class AddressBookSystem {
             System.out.println("\n" + contact.toString());
         }
 
-        // Usecase 3: Editing an existing Contact
-        System.out.println("Enter the name of the contact to edit:");
-        System.out.print("First Name: ");
-        String editFirstName = sc.next();
-        System.out.print("Last Name: ");
-        String editLastName = sc.next();
+        boolean istrue = false;
 
-        // using firstname and lastname fetch whole info of that contact
-        AddContacts old_contact = addressBook.getContactByName(editFirstName, editLastName);
+        System.out.println("do you want to edit contact? (y or n)");
+        char ch = sc.next().charAt(0);
 
-        // if contact exist edit contact details
-        if (old_contact != null) {
-            System.out.println("Enter new details for the contact:");
+        if (ch == 'y')
+            istrue = true;
 
+        if (istrue) {
+
+            // Usecase 3: Editing an existing Contact
+            System.out.println("Enter the name of the contact to edit:");
             System.out.print("First Name: ");
-            String firstName = sc.next();
+            String editFirstName = sc.next();
             System.out.print("Last Name: ");
-            String lastName = sc.next();
-            System.out.print("Address: ");
-            String address = sc.next();
-            System.out.print("City: ");
-            String city = sc.next();
-            System.out.print("State: ");
-            String state = sc.next();
-            System.out.print("Zip: ");
-            String zip = sc.next();
-            System.out.print("Phone Number: ");
-            String phoneNumber = sc.next();
-            System.out.print("Email: ");
-            String email = sc.next();
+            String editLastName = sc.next();
 
-            AddContacts newContact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber,
-                    email);
+            // using firstname and lastname fetch whole info of that contact
+            AddContacts old_contact = addressBook.getContactByName(editFirstName, editLastName);
 
-            // call editContact will update old_contact with newContact
-            addressBook.editContact(old_contact, newContact);
+            // if contact exist edit contact details
+            if (old_contact != null) {
+                System.out.println("Enter new details for the contact:");
 
-        } else {
-            System.out.println("Contact not found!");
+                System.out.print("First Name: ");
+                String firstName = sc.next();
+                System.out.print("Last Name: ");
+                String lastName = sc.next();
+                System.out.print("Address: ");
+                String address = sc.next();
+                System.out.print("City: ");
+                String city = sc.next();
+                System.out.print("State: ");
+                String state = sc.next();
+                System.out.print("Zip: ");
+                String zip = sc.next();
+                System.out.print("Phone Number: ");
+                String phoneNumber = sc.next();
+                System.out.print("Email: ");
+                String email = sc.next();
+
+                AddContacts newContact = new AddContacts(firstName, lastName, address, city, state, zip, phoneNumber,
+                        email);
+
+                // call editContact will update old_contact with newContact
+                addressBook.editContact(old_contact, newContact);
+
+            } else {
+                System.out.println("Contact not found!");
+            }
         }
 
-        // Usecase 4: Deleting a person
-        System.out.println("Enter the name of the contact to delete:");
-        System.out.print("First Name: ");
-        String deleteFirstName = sc.next();
-        System.out.print("Last Name: ");
-        String deleteLastName = sc.next();
+        istrue = false;
 
-        // using firstname and lastname fetch whole info of that contact
-        AddContacts contactTodelete = addressBook.getContactByName(deleteFirstName, deleteLastName);
+        System.out.println("do you want to delete contact? (y or n)");
+        ch = sc.next().charAt(0);
 
-        if (contactTodelete != null) {
-            addressBook.deleteContact(contactTodelete);
+        if (ch == 'y')
+            istrue = true;
 
-        } else {
-            System.out.println("contact not found!");
+        if (istrue) {
+            // Usecase 4: Deleting a person
+            System.out.println("Enter the name of the contact to delete:");
+            System.out.print("First Name: ");
+            String deleteFirstName = sc.next();
+            System.out.print("Last Name: ");
+            String deleteLastName = sc.next();
+
+            // using firstname and lastname fetch whole info of that contact
+            AddContacts contactTodelete = addressBook.getContactByName(deleteFirstName, deleteLastName);
+
+            if (contactTodelete != null) {
+                addressBook.deleteContact(contactTodelete);
+
+            } else {
+                System.out.println("contact not found!");
+            }
         }
 
-        // Usecase 6: Refactor to add multiple Address Books to the System
-        System.out.println("Add multiple Address Books to the System");
-        char addAnotherBook;
-        do {
-            System.out.print("Enter a unique name for the new Address Book: ");
-            String addressBookName = sc.next();
+        istrue = false;
 
-            // Create a new Address Book and add it to the system
-            AddressBook newAddressBook = new AddressBook();
-            StoreAddressBook.addAddressBook(addressBookName, newAddressBook);
-            // printing the name of address book
-            System.out.println("Name of addressBook: " + addressBookName);
+        System.out.println("do you want to add multiple addressbook? (y or n)");
+        ch = sc.next().charAt(0);
 
-            System.out.print("Do you want to add another Address Book? (y/n): ");
-            addAnotherBook = sc.next().charAt(0);
-        } while (addAnotherBook == 'y');
+        if (ch == 'y')
+            istrue = true;
 
-        // usecase8:
-        // Assuming user wants to search by city
-        System.out.print("Enter the city to search: ");
-        String searchCity = sc.next();
+        if (istrue) {
+            // Usecase 6: Refactor to add multiple Address Books to the System
+            System.out.println("Add multiple Address Books to the System");
+            char addAnotherBook;
+            do {
+                System.out.print("Enter a unique name for the new Address Book: ");
+                String addressBookName = sc.next();
 
-        List<AddContacts> citySearchResults = addressBook.searchByCity(searchCity);
+                // Create a new Address Book and add it to the system
+                AddressBook newAddressBook = new AddressBook();
+                StoreAddressBook.addAddressBook(addressBookName, newAddressBook);
+                // printing the name of address book
+                System.out.println("Name of addressBook: " + addressBookName);
 
-        if (!citySearchResults.isEmpty()) {
-            System.out.println("\nSearch Results in City '" + searchCity + "':");
-            citySearchResults.forEach(person -> System.out.println(person.toString()));
-        } else {
-            System.out.println("No results found in the city '" + searchCity + "'.");
+                System.out.print("Do you want to add another Address Book? (y/n): ");
+                addAnotherBook = sc.next().charAt(0);
+            } while (addAnotherBook == 'y');
         }
 
-        // Assuming user wants to search by state
-        System.out.print("\nEnter the state to search: ");
-        String searchState = sc.next();
+        istrue = false;
 
-        List<AddContacts> stateSearchResults = addressBook.searchByState(searchState);
+        System.out.println("do you want to search user by city? (y or n)");
+        ch = sc.next().charAt(0);
 
-        if (!stateSearchResults.isEmpty()) {
-            System.out.println("\nSearch Results in State '" + searchState + "':");
-            stateSearchResults.forEach(person -> System.out.println(person.toString()));
-        } else {
-            System.out.println("No results found in the state '" + searchState + "'.");
+        if (ch == 'y')
+            istrue = true;
+        if (istrue) {
+            // usecase8:
+            // Assuming user wants to search by city
+            System.out.print("Enter the city to search: ");
+            String searchCity = sc.next();
+
+            List<AddContacts> citySearchResults = addressBook.searchByCity(searchCity);
+
+            if (!citySearchResults.isEmpty()) {
+                System.out.println("\nSearch Results in City '" + searchCity + "':");
+                citySearchResults.forEach(person -> System.out.println(person.toString()));
+            } else {
+                System.out.println("No results found in the city '" + searchCity + "'.");
+            }
+        }
+
+        istrue = false;
+
+        System.out.println("do you want to search user by state? (y or n)");
+        ch = sc.next().charAt(0);
+
+        if (ch == 'y')
+            istrue = true;
+        if (istrue) {
+            // Assuming user wants to search by state
+            System.out.print("\nEnter the state to search: ");
+            String searchState = sc.next();
+
+            List<AddContacts> stateSearchResults = addressBook.searchByState(searchState);
+
+            if (!stateSearchResults.isEmpty()) {
+                System.out.println("\nSearch Results in State '" + searchState + "':");
+                stateSearchResults.forEach(person -> System.out.println(person.toString()));
+            } else {
+                System.out.println("No results found in the state '" + searchState + "'.");
+            }
         }
 
         // Usecase 9:
