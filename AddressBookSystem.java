@@ -74,7 +74,6 @@ class AddressBook {
     private Map<String, List<AddContacts>> cityToPerson = new HashMap<>();
     private Map<String, List<AddContacts>> stateToPerson = new HashMap<>();
 
-
     public void addContact(AddContacts contact) {
         // use case 7
         if (!contacts.contains(contact)) {
@@ -145,6 +144,14 @@ class AddressBook {
 
     public List<AddContacts> getPersonsByState(String state) {
         return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>());
+    }
+
+    public int getPersonCountByCity(String city) {
+        return cityToPerson.getOrDefault(city.toLowerCase(), new ArrayList<>()).size();
+    }
+
+    public int getPersonCountByState(String state) {
+        return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>()).size();
     }
 }
 
@@ -308,7 +315,7 @@ public class AddressBookSystem {
             System.out.println("No results found in the state '" + searchState + "'.");
         }
 
-        //Usecase 9:
+        // Usecase 9:
         System.out.print("\nEnter the state to view persons: ");
         String viewState = sc.next();
 
@@ -320,6 +327,21 @@ public class AddressBookSystem {
         } else {
             System.out.println("No persons found in the state '" + viewState + "'.");
         }
+
+        // Usecase 10:
+        // Get count by city
+        System.out.print("Enter the city to get the count of contact persons: ");
+        String countByCity = sc.next();
+
+        int personCountByCity = addressBook.getPersonCountByCity(countByCity);
+        System.out.println("Number of contact persons in City '" + countByCity + "': " + personCountByCity);
+
+        // Get count by state
+        System.out.print("\nEnter the state to get the count of contact persons: ");
+        String countByState = sc.next();
+
+        int personCountByState = addressBook.getPersonCountByState(countByState);
+        System.out.println("Number of contact persons in State '" + countByState + "': " + personCountByState);
 
         sc.close();
 
