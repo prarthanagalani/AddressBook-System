@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 class AddContacts {
@@ -43,6 +44,14 @@ class AddContacts {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public String toString() {
@@ -102,6 +111,18 @@ class AddressBook {
 
     public ArrayList<AddContacts> getAllContacts() {
         return contacts;
+    }
+
+    public List<AddContacts> searchByCity(String city) {
+        return contacts.stream()
+                .filter(contact -> contact.getCity().equalsIgnoreCase(city))
+                .toList();
+    }
+
+    public List<AddContacts> searchByState(String state) {
+        return contacts.stream()
+                .filter(contact -> contact.getState().equalsIgnoreCase(state))
+                .toList();
     }
 }
 
@@ -237,6 +258,33 @@ public class AddressBookSystem {
             System.out.print("Do you want to add another Address Book? (y/n): ");
             addAnotherBook = sc.next().charAt(0);
         } while (addAnotherBook == 'y');
+
+        // usecase8:
+        // Assuming user wants to search by city
+        System.out.print("Enter the city to search: ");
+        String searchCity = sc.next();
+
+        List<AddContacts> citySearchResults = addressBook.searchByCity(searchCity);
+
+        if (!citySearchResults.isEmpty()) {
+            System.out.println("\nSearch Results in City '" + searchCity + "':");
+            citySearchResults.forEach(person -> System.out.println(person.toString()));
+        } else {
+            System.out.println("No results found in the city '" + searchCity + "'.");
+        }
+
+        // Assuming user wants to search by state
+        System.out.print("\nEnter the state to search: ");
+        String searchState = sc.next();
+
+        List<AddContacts> stateSearchResults = addressBook.searchByState(searchState);
+
+        if (!stateSearchResults.isEmpty()) {
+            System.out.println("\nSearch Results in State '" + searchState + "':");
+            stateSearchResults.forEach(person -> System.out.println(person.toString()));
+        } else {
+            System.out.println("No results found in the state '" + searchState + "'.");
+        }
 
         sc.close();
 
