@@ -64,7 +64,13 @@ class AddressBook {
     private ArrayList<AddContacts> contacts = new ArrayList<>();
 
     public void addContact(AddContacts contact) {
-        contacts.add(contact);
+        // use case 7
+        if (!contacts.contains(contact)) {
+            contacts.add(contact);
+            System.out.println("Contact added successfully.");
+        } else {
+            System.out.println("Duplicate entry! Contact with the same name already exists.");
+        }
     }
 
     // function that will return AddContact object that matches which given
@@ -147,6 +153,7 @@ public class AddressBookSystem {
 
             System.out.print("Do you want to add another person? (y/n): ");
             addAnother = sc.next().charAt(0);
+
         } while (addAnother == 'y');
 
         // Display all contacts in the Address Book
