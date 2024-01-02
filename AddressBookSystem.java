@@ -1,5 +1,7 @@
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +154,12 @@ class AddressBook {
 
     public int getPersonCountByState(String state) {
         return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>()).size();
+    }
+
+     public List<AddContacts> sortByName() {
+        return contacts.stream()
+                .sorted(Comparator.comparing(AddContacts::getFirstName).thenComparing(AddContacts::getLastName))
+                .collect(Collectors.toList());
     }
 }
 
@@ -342,7 +350,17 @@ public class AddressBookSystem {
 
         int personCountByState = addressBook.getPersonCountByState(countByState);
         System.out.println("Number of contact persons in State '" + countByState + "': " + personCountByState);
+        
+        //Use case11: 
+        // Sort entries by name
+        List<AddContacts> sortedContacts = addressBook.sortByName();
 
+        if (!sortedContacts.isEmpty()) {
+            System.out.println("\nSorted Entries by Name:");
+            sortedContacts.forEach(person -> System.out.println(person.toString()));
+        } else {
+            System.out.println("No entries to sort.");
+        }
         sc.close();
 
     }
