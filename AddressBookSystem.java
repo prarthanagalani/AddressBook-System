@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,12 +147,12 @@ class AddressBook {
         return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>());
     }
 
-    public int getPersonCountByCity(String city) {
-        return cityToPerson.getOrDefault(city.toLowerCase(), new ArrayList<>()).size();
+    public long getPersonCountByCity(String city) {
+        return cityToPerson.getOrDefault(city, Collections.emptyList()).stream().count();
     }
 
-    public int getPersonCountByState(String state) {
-        return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>()).size();
+    public long getPersonCountByState(String state) {
+        return stateToPerson.getOrDefault(state, Collections.emptyList()).stream().count();
     }
 }
 
@@ -333,14 +334,14 @@ public class AddressBookSystem {
         System.out.print("Enter the city to get the count of contact persons: ");
         String countByCity = sc.next();
 
-        int personCountByCity = addressBook.getPersonCountByCity(countByCity);
+        long personCountByCity = addressBook.getPersonCountByCity(countByCity);
         System.out.println("Number of contact persons in City '" + countByCity + "': " + personCountByCity);
 
         // Get count by state
         System.out.print("\nEnter the state to get the count of contact persons: ");
         String countByState = sc.next();
 
-        int personCountByState = addressBook.getPersonCountByState(countByState);
+        long personCountByState = addressBook.getPersonCountByState(countByState);
         System.out.println("Number of contact persons in State '" + countByState + "': " + personCountByState);
 
         sc.close();
