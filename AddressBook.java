@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.Buffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -91,12 +92,12 @@ public class AddressBook {
         return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>());
     }
 
-    public int getPersonCountByCity(String city) {
-        return cityToPerson.getOrDefault(city.toLowerCase(), new ArrayList<>()).size();
+    public long getPersonCountByCity(String city) {
+        return cityToPerson.getOrDefault(city, Collections.emptyList()).stream().count();
     }
 
-    public int getPersonCountByState(String state) {
-        return stateToPerson.getOrDefault(state.toLowerCase(), new ArrayList<>()).size();
+    public long getPersonCountByState(String state) {
+        return stateToPerson.getOrDefault(state, Collections.emptyList()).stream().count();
     }
 
     public List<AddContacts> sortByName() {
